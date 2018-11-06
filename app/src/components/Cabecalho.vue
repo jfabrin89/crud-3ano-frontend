@@ -1,7 +1,7 @@
 <template>
   <div id="cabecalho">
     <Menu :gaveta="inGaveta" />
-    <v-toolbar color="black darken-3" dark app :cliped-left="$vuetify.breakpoint.mdAndUp" fixed>
+    <v-toolbar color="black darken-3" dark app :clipped-left="$vuetify.breakpoint.mdAndUp" fixed>
       <v-toolbar-title class="ml-0 pl-3" style="width: 300px">
         <v-toolbar-side-icon @click.stop="inGaveta = !inGaveta" />
         <span class="hidden-sm-and-down">Crud 3º Ano ADS UNIPAR</span>
