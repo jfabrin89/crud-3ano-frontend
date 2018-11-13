@@ -20,19 +20,41 @@
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.situacao | situacao }}</td>
         </template>
+        <template slot="no-data">
+          <v-btn flat color="primary" @click="buscarDados">
+            <v-icon class="mr-2">autorenew</v-icon>
+            Recarregar
+          </v-btn>
+        </template>
       </v-data-table>
+      <div style="position: relative">
+        <v-btn 
+          absolute
+          small
+          dark
+          fab
+          top
+          right
+          @click="modal.cliente = !modal.cliente">
+          <v-icon>add</v-icon>
+        </v-btn>
+      </div>
     </v-content>
+
+    <ModalClienteCadastro :modal="modal.cliente" v-on:cliente="closeCliente" />
   </div>
 </template>
 
 <script>
 import Cabecalho from '@/components/Cabecalho'
+import ModalClienteCadastro from '@/components/ModalClienteCadastro'
 export default {
   created () {
     this.buscarDados()
   },
   components: {
-    Cabecalho
+    Cabecalho,
+    ModalClienteCadastro
   },
   data () {
     return {
@@ -46,6 +68,9 @@ export default {
           {text: 'Situação', value: 'situacao'}
         ],
         item: []
+      },
+      modal: {
+        cliente: false
       }
     }
   },
@@ -64,6 +89,9 @@ export default {
         .then((success) => {
           this.tblCliente.item = success.data
         })
+    },
+    closeCliente (val) {
+      this.modal.cliente = val
     }
   }
 }
