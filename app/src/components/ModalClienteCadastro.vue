@@ -65,29 +65,69 @@ export default {
     close (val) {
       this.$emit('cliente', val)
     },
+    limpar () {
+      this.cliente = {
+        nome: '',
+        telefone: '',
+        email: '',
+        situacao: 'A'
+      }
+      this.form = Object.assign({}, this.cliente)
+      this.$refs.form.reset()
+    },
     salvar () {
-    this
-      .axios
-      .post('clientes', this.cliente)
-      .then((success) => {
-        this.mensagem = {
-          mostrar: true,
-          texto: 'Salvo com sucesso',
-          tipo: 'success'
+      if (this.$refs.form.validate()) {
+        if (!this.cliente.id) {
+          this
+            .axios
+            .post('clientes', this.cliente)
+            .then((success) => {
+              this.mensagem = {
+                mostrar: true,
+                texto: 'Salvo com sucesso',
+                tipo: 'success'
+              }
+              this.limpar()
+            })
+            .catch((error) => {
+              this.mensagem = {
+                mostrar: true,
+                texto: 'Erro ao salvar ' + error,
+                tipo: 'error'
+              }
+            })
+        } else {
+          this
+            .axios
+            .put('clientes/' + this.cliente.id, this.cliente)
+            .then((success) => {
+              this.mensagem = {
+                mostrar: true,
+                texto: 'Alterado com sucesso',
+                tipo: 'success'
+              }
+              this.limpar()
+            })
+            .catch((error) => {
+              this.mensagem = {
+                mostrar: true,
+                texto: 'Erro ao alterar ' + error,
+                tipo: 'error'
+              }
+            })
         }
-      })
-      .catch((error) => {
-        this.mensagem = {
-          mostrar: true,
-          texto: 'Erro ao salvar ' + error,
-          tipo: 'error'
-        }
-      })
+      }
     }
   },
   props: [
-    'modal'
-  ]
+    'modal',
+    'registro'
+  ],
+  watch: {
+    registro: function (val) {
+      if (val !== '') this.cliente = val
+    }
+  }
 }
 </script>
 
